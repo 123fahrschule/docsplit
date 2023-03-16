@@ -2,7 +2,7 @@ here = File.dirname(__FILE__)
 require File.join(here, '..', 'lib', 'docsplit')
 require 'fileutils'
 require 'minitest'
-require "minitest/autorun"
+require 'minitest/autorun'
 
 class Minitest::Test
   include Docsplit
@@ -10,7 +10,7 @@ class Minitest::Test
   OUTPUT = 'test/output'
 
   def clear_output
-    FileUtils.rm_r(OUTPUT) if File.exists?(OUTPUT)
+    FileUtils.rm_r(OUTPUT) if File.exist?(OUTPUT)
   end
 
   def teardown
@@ -19,11 +19,14 @@ class Minitest::Test
 
   def assert_directory_contains(dir, files)
     files_in_directory = Dir["#{dir}/*"]
-    if files.kind_of?(Array)
+    if files.is_a?(Array)
       assert files_in_directory.length == files.length, "Expected directory to contain exactly #{files.length} files"
     else
       files = [files]
     end
-    files.each { |f| assert files_in_directory.include?(File.join(dir, f)), "Expected directory #{dir} to contain file #{f}, but it contains #{files_in_directory.inspect}" }
+    files.each do |f|
+      assert files_in_directory.include?(File.join(dir, f)),
+             "Expected directory #{dir} to contain file #{f}, but it contains #{files_in_directory.inspect}"
+    end
   end
 end
